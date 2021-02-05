@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<body align="center">
+    <h1>Post url here</h1>
+    <form action='/parse/', method='post'>{% csrf_token %}
+        <label for="lname">URI here:</label><br>
+        <input type="text" id="lname" name="lname">
+        <input type="submit" value="Parse">
+    </form>
+    <div class="status">
+        {{ status }}
+    </div>
+</body>
+</html>
