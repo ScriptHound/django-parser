@@ -4,14 +4,17 @@ from djparser.parser import get_parsed_data
 from djparser.celery import app
 # Create your views here.
 
+
 @app.task
 def parse_task(url: str) -> str:
     return get_parsed_data(url)
 
 
-def index(request, status=None):
+def index(request):
+    print(request.GET)
     context = {
-        'status': status
+        'status': request.GET.get('status'),
+        'pid': request.GET.get('pid')
     }
     return render(request, 'index.html', context)
 
@@ -19,5 +22,17 @@ def index(request, status=None):
 def parse(request):
     if request.method == 'POST':
         url = request.POST.get('lname')
-        status = parse_task.delay(url).status
-        return redirect('/index', status=status)
+        task = parse_task.delay(url)
+        status = task.status
+        pid = task.id
+        return redirect(f'/?status={status}&pid={pid}')
+
+    if request.method == 'GET':
+        pid = request.GET.get('pid')
+        result = app.AsyncResult(pid).result
+
+        context = {
+            'result': result,
+            'pid': pid
+        }
+        return render(request, 'results.html', context)

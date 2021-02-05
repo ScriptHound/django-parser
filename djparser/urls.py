@@ -19,6 +19,6 @@ from main.views import index, parse
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('index/', index),
+    path('', index),
     path('parse/', parse)
 ]

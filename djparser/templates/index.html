@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <body align="center">
+    {% block form_block %}
     <h1>Post url here</h1>
     <form action='/parse/', method='post'>{% csrf_token %}
         <label for="lname">URI here:</label><br>
@@ -8,7 +9,16 @@
         <input type="submit" value="Parse">
     </form>
     <div class="status">
-        {{ status }}
+        Task status is: {{ status }}
     </div>
+    <div class="pid">
+        PID is: {{ pid }}
+    </div>
+    {% endblock %}
+    <form action='/parse/', method='get'>
+        <label for="pid">PID here:</label><br>
+        <input type="text" id="lname" name="pid">
+        <input type="submit" value="Get">
+    </form>
 </body>
 </html>
