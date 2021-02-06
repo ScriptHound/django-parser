@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from djparser.celery import app
 
 from .parser import get_parsed_data
-from .queries import get_all_pids, save_pid, save_parsing_results
+from .queries import PIDQuery, ResultRowQuery
 # Create your views here.
 
 
@@ -17,7 +17,7 @@ def index(request):
     context = {
         'status': request.GET.get('status'),
         'pid': request.GET.get('pid'),
-        'saved_pids': get_all_pids()
+        'saved_pids': PIDQuery.get_all_pids()
     }
     return render(request, 'index.html', context)
 
@@ -28,13 +28,13 @@ def parse(request):
         task = parse_task.delay(url)
         status = task.status
         pid = task.id
-        save_pid(pid)
+        PIDQuery.create(pid)
         return redirect(f'/?status={status}&pid={pid}')
 
     if request.method == 'GET':
         pid = request.GET.get('pid')
         result = app.AsyncResult(pid).result
-        save_parsing_results(result)
+        ResultRowQuery.create(result)
 
         context = {
             'result': result,

@@ -3,18 +3,30 @@ from django.http.request import QueryDict
 from .models import ResultIdModel, ResultRow
 
 
-def save_pid(pid: str) -> QueryDict:
-    return ResultIdModel.objects.create(pid=pid)
+class PIDQuery:
+    @staticmethod
+    def create(pid: str) -> QueryDict:
+        return ResultIdModel.objects.create(pid=pid)
+
+    @staticmethod
+    def get_all_pids() -> list:
+        return [model.pid for model in ResultIdModel.objects.all()]
+
+    @staticmethod
+    def delete(pid: str) -> dict:
+        return ResultIdModel.objects.filter(pid=pid).delete()
 
 
-def save_parsing_results(pid: ResultIdModel, **rows) -> None:
-    for k, v in rows.items():
-        ResultRow.objects.create(parent_id=pid, name=k, value=v)
+class ResultRowQuery:
+    @staticmethod
+    def create(pid: ResultIdModel, **rows) -> None:
+        for k, v in rows.items():
+            ResultRow.objects.create(parent_id=pid, name=k, value=v)
 
+    @staticmethod
+    def get_results_by_id(pid: str) -> QuerySet:
+        return ResultIdModel.objects.get(pid=pid).resultrow_set.all()
 
-def get_all_pids():
-    return [model.pid for model in ResultIdModel.objects.all()]
-
-
-def get_results_by_id(pid: str) -> QuerySet:
-    return ResultIdModel.objects.filter(pid=pid)[0].resultrow_set.all()
+    @staticmethod
+    def delete(name: str) -> dict:
+        return ResultRow.objects.filter(name=name).delete()
