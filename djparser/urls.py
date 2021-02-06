@@ -15,10 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from main.views import index, parse
+from main.views import index, parse, delete_pid
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index),
-    path('parse/', parse)
+    path('parse/', parse),
+    path('delete_pid/', delete_pid, name='delete_pid')
 ]

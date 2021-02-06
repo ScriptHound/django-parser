@@ -1,7 +1,7 @@
+import os
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from djparser.celery import app
-
 from .parser import get_parsed_data
 from .queries import PIDQuery, ResultRowQuery
 # Create your views here.
@@ -20,6 +20,12 @@ def index(request):
         'saved_pids': PIDQuery.get_all_pids()
     }
     return render(request, 'index.html', context)
+
+
+def delete_pid(request):
+    if request.method == 'GET':
+        PIDQuery.delete(request.GET.get('pid'))
+        return redirect('/')
 
 
 def parse(request):

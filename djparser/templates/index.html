@@ -21,7 +21,7 @@
     </form>
     Saved PIDs:
     {% for pid in saved_pids %}
-        <br>{{ pid }}</br>
+        <br>{{ pid }} <a href="delete_pid?pid={{ pid }}">delete</a></br>
     {% endfor %}
 </body>
 </html>
