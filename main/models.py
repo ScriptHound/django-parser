@@ -10,4 +10,8 @@ class ResultIdModel(models.Model):
 class ResultRow(models.Model):
     name = models.CharField(max_length=200)
     value = models.CharField(max_length=200)
-    parent_id = models.ForeignKey(ResultIdModel, on_delete=models.CASCADE)
+    parent_id = models.ForeignKey(
+                                  ResultIdModel,
+                                  on_delete=models.CASCADE,
+                                  related_name="parent"
+                                  )

@@ -14,6 +14,7 @@ def parse_task(url: str) -> str:
 
 def index(request):
     print(request.GET)
+
     context = {
         'status': request.GET.get('status'),
         'pid': request.GET.get('pid'),
@@ -39,7 +40,7 @@ def parse(request):
 
     if request.method == 'GET':
         pid = request.GET.get('pid')
-        result = app.AsyncResult(pid).result
+        result = app.AsyncResult(PIDQuery.get_db_pid_by_id(pid)).result
         ResultRowQuery.create(result)
 
         context = {
