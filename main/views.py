@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from djparser.parser import get_parsed_data
 from djparser.celery import app
+
+from .parser import get_parsed_data
+from .queries import get_all_pids, save_pid, save_parsing_results
 # Create your views here.
 
 
@@ -14,7 +16,8 @@ def index(request):
     print(request.GET)
     context = {
         'status': request.GET.get('status'),
-        'pid': request.GET.get('pid')
+        'pid': request.GET.get('pid'),
+        'saved_pids': get_all_pids()
     }
     return render(request, 'index.html', context)
 
@@ -25,11 +28,13 @@ def parse(request):
         task = parse_task.delay(url)
         status = task.status
         pid = task.id
+        save_pid(pid)
         return redirect(f'/?status={status}&pid={pid}')
 
     if request.method == 'GET':
         pid = request.GET.get('pid')
         result = app.AsyncResult(pid).result
+        save_parsing_results(result)
 
         context = {
             'result': result,

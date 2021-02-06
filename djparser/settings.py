@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 from pathlib import Path
 from .get_config import get_config
+import psycopg2.extensions
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -83,7 +84,11 @@ DATABASES = {
         'USER': DB_CONFIG['USER'],
         'HOST': DB_CONFIG['HOST'],
         'PORT': DB_CONFIG['PORT'],
-        'PASSWORD': DB_CONFIG['PASSWORD']
+        'PASSWORD': DB_CONFIG['PASSWORD'],
+        'OPTIONS': {
+            'isolation_level':
+                psycopg2.extensions.ISOLATION_LEVEL_REPEATABLE_READ,
+        }
     }
 }
 

@@ -2,7 +2,6 @@
 <html>
 <body align="center">
     {% block form_block %}
-    <h1>Post url here</h1>
     <form action='/parse/', method='post'>{% csrf_token %}
         <label for="lname">URI here:</label><br>
         <input type="text" id="lname" name="lname">
@@ -20,5 +19,9 @@
         <input type="text" id="lname" name="pid">
         <input type="submit" value="Get">
     </form>
+    Saved PIDs:
+    {% for pid in saved_pids %}
+        <br>{{ pid }}</br>
+    {% endfor %}
 </body>
 </html>

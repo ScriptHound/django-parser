@@ -9,9 +9,9 @@ PORT = CONF['PORT']
 PASSWD = CONF['PASSWORD']
 
 app = Celery('main',
-            broker='redis://127.0.0.1:6379',
-            backend=f'db+postgresql://{USER}:{PASSWD}@{HOST}:{PORT}/{NAME}'
-            )
+             broker='redis://127.0.0.1:6379',
+             backend=f'db+postgresql://{USER}:{PASSWD}@{HOST}:{PORT}/{NAME}'
+             )
 
 app.conf.update(
     result_expires=3600,

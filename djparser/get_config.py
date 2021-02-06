@@ -6,6 +6,7 @@ logging.basicConfig(level=logging.ERROR)
 
 BASE_DIR = Path(__file__).resolve().parent
 
+
 def get_config() -> dict:
     config = {}
     try:
